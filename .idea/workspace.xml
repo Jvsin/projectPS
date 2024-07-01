@@ -4,10 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="75429d28-377b-4ee1-a4ea-935d0da8052f" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="75429d28-377b-4ee1-a4ea-935d0da8052f" name="Changes" comment="basic client test file">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.venv/Scripts/main_server.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/Scripts/main_server.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/Scripts/basic_client.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/Scripts/basic_client.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -24,6 +23,18 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "Jvsin"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/Jvsin/projectPS.git",
+    "accountId": "8b3f7fa0-fde7-4d3d-85ae-53b9dfea19a2"
+  }
+}]]></component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/.venv/Scripts/activate_this.py" root0="FORCE_HIGHLIGHTING" />
   </component>
@@ -90,6 +101,28 @@
       <option name="presentableId" value="Default" />
       <updated>1719856790674</updated>
     </task>
+    <task id="LOCAL-00001" summary="basic logic of server">
+      <option name="closed" value="true" />
+      <created>1719860016532</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1719860016532</updated>
+    </task>
+    <task id="LOCAL-00002" summary="basic client test file">
+      <option name="closed" value="true" />
+      <created>1719860060024</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1719860060024</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="basic logic of server" />
+    <MESSAGE value="basic client test file" />
+    <option name="LAST_COMMIT_MESSAGE" value="basic client test file" />
   </component>
 </project>
