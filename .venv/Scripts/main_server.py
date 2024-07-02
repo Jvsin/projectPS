@@ -2,6 +2,8 @@ import json
 import socket
 import threading
 import queue
+import time
+from datetime import datetime
 
 # Wczytywanie konfiguracji
 def load_config(config_file):
@@ -44,14 +46,17 @@ def handle_client_disconnect(conn, addr, KKO, KKW):
 # Wątek monitorujący
 def monitor_thread(LT, KKO, KKW):
     while True:
-        if not KKW.empty():
-            message, recipients = KKW.get()
-            for recipient in recipients:
-                try:
-                    recipient.sendall(message)
-                except socket.error as e:
-                    print(f'Błąd wysyłania do {recipient.getpeername()}: {e}')
-            KKW.task_done()
+        if KKO.empty():
+            time.sleep(0.001)
+            continue
+
+        conn, raw_message = KKO.get()
+        message = raw_message.decode()
+
+        if validate_message(message):
+            manage_message(message)
+        else:
+            print(f'Nieprawidłowy komunikat: {message}')
 
 # Wątek interfejsu użytkownika
 def user_interface_thread():
@@ -61,6 +66,29 @@ def user_interface_thread():
             print("Zamykanie serwera...")
             break
         # Tutaj można dodać więcej komend
+
+def validate_message(message):
+    try:
+        message = json.loads(message)
+        required_fields = {"type", "id", "topic", "mode", "timestamp", "payload"}
+        if not all(field in message for field in required_fields):
+            return False
+
+        if message["type"] not in {"register", "withdraw", "message", "status"}:
+            return False
+
+        if message["mode"] not in {"producer", "subscriber"}:
+            return False
+
+        datetime.fromisoformat(message["timestamp"])  # Sprawdzenie poprawności formatu ISO 8601
+
+        return True
+    except (ValueError, KeyError, json.JSONDecodeError):
+        return False
+
+
+def manage_message(message):
+    print(f'Zarządzanie komunikatem: {message}')
 
 def main():
     # Wczytywanie konfiguracji
