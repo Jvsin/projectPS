@@ -153,12 +153,15 @@ class SPClientAPI:
                 message = self.client_socket.recv(1024).decode()
                 if message:
                     message_data = json.loads(message)
-                    topic = message_data.get("topic")
-                    if topic in self.topics_subscribed:
-                        callback = self.topics_subscribed[topic]
-                        callback(message_data["payload"])
+                    if message_data["type"] == "status" and message_data["topic"] == "logs":
+                        print(f'Received server status: {message_data["payload"]}')
                     else:
-                        print(f'Received message on unregistered topic: {topic}')
+                        topic = message_data.get("topic")
+                        if topic in self.topics_subscribed:
+                            callback = self.topics_subscribed[topic]
+                            callback(message_data["payload"])
+                        else:
+                            print(f'Received message on unregistered topic: {topic}')
         except socket.error as e:
             print(f'Error receiving message from server: {e}')
             self.connected = False
@@ -225,6 +228,7 @@ if __name__ == "__main__":
             client.withdraw_subscriber(topic_name)
 
         elif command == "server_status":
+            time.sleep(1)
             client.get_server_status(status_callback)
 
         else:

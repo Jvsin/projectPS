@@ -119,10 +119,11 @@ class Server:
     def handle_message_type(self, message_data, client_socket):
         topic = message_data['topic']
         if topic in topics:
-            KKW.append({
-                'socket': client_socket,
-                'message': message_data
-            })
+            for subscriber_socket in topics[topic]['subscribers']:
+                KKW.append({
+                    'socket': subscriber_socket,
+                    'message': message_data
+                })
             print(f'Dodano komunikat do KKW dla tematu {topic}')
         else:
             print(f'Temat {topic} nie istnieje')
@@ -178,12 +179,25 @@ class Server:
 
     def monitoring_thread(self):
         while True:
-            if not KKO:
+            if not KKO and not KKW:
                 time.sleep(0.001)
                 continue
-            message = KKO.pop(0)
-            if self.validate_message(message):
-                self.manage_message(message)
+
+            if KKO:
+                message = KKO.pop(0)
+                if self.validate_message(message):
+                    self.manage_message(message)
+
+            if KKW:
+                item = KKW.pop(0)
+                print(item)
+                client_socket = item['socket']
+                message = item['message']
+                try:
+                    client_socket.sendall(json.dumps(message).encode())
+                    print(f'Wysłano wiadomość do klienta {clients[client_socket]}: {message}')
+                except socket.error as e:
+                    print(f'Błąd wysyłania wiadomości do klienta: {e}')
 
     def validate_message(self, message):
         try:
@@ -213,6 +227,7 @@ class Server:
             command = input("Wpisz komendę (np. 'show topics'): ")
             if command.lower() == 'show topics':
                 self.show_registered_topics()
+            ## zamykanie serwera
 
     def show_registered_topics(self):
         print("Zarejestrowane tematy:")
