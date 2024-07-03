@@ -50,7 +50,7 @@ class Server:
                 # print(message)
                 # self.manage_message(message)
         except socket.error as e:
-            print(f'Błąd komunikacji z klientem: {e}')
+            print(f'Zerwanie połączenia z klientem: {e}')
         finally:
             self.disconnect_client(client_socket)
 
@@ -107,16 +107,21 @@ class Server:
         client_id = message_data['id']
         mode = message_data['mode']
 
+        subs_to_delete = {}
+
         if topic in topics:
             if mode == 'producer':
                 if client_id in topics[topic]['producers'] and topics[topic]['producers'][client_id] == client_socket:
-                    print(f'check: {topics[topic]['producers']}')
                     if not topics[topic]['producers']:
                         del topics[topic]
-                    # self.disconnect_client(client_socket)
-                    print(f'check2: {topics[topic]['producers'][client_id]}')
+
+                    if client_id in topics[topic]['subscribers']:
+                        del topics[topic]['subscribers'][client_id]
+                    subs_to_delete = topics[topic]['subscribers']
+                    print(f'subskrybenci tematu: {subs_to_delete}')
                     del topics[topic]['producers'][client_id]
-                    del topics[topic] # tu przeniosłem to co w 114
+                    del topics[topic] # tu przeniosłem to co w 115
+                    self.check_users_to_delete(subs_to_delete)
                     print(f'Usunięto temat {topic}')
                 else:
                     print(f'Klient {client_id} nie jest producentem tematu {topic}')
@@ -189,7 +194,7 @@ class Server:
         if client_socket in clients:
             del clients[client_socket]
         for topic, data in topics.items():
-            print(topic)
+            print(f'Aktualny temat: {topic}')
             print(data)
             # if client_socket in data['subscribers']:
             #     data['subscribers'].remove(client_socket)
@@ -211,7 +216,28 @@ class Server:
         print(topics_to_delete)
         for topic in topics_to_delete:
             del topics[topic]
+        self.check_users_to_delete(subs_to_delete)
+        # for id, sock in subs_to_delete.items():
+        #     print(f'Sprawdzamy: {id}, {sock}')
+        #     flag = 1
+        #     for topic, data in topics.items():
+        #         if id in data['producers'].keys():
+        #             flag = 0
+        #             continue
+        #         # if not data['subscribers']:
+        #         #     print("pusty slownik")
+        #         #     flag = 0
+        #         for sub_id, sub_sock in data['subscribers'].items():
+        #             print(f'Subskrybent w temacie: {sub_id} ? {id}')
+        #             if sub_id == id:
+        #                 flag = 0
+        #                 break
+        #     if flag == 1:
+        #         print(f'Do usuniecia: {id}, {sock}')
+        #         sock.close()
+        client_socket.close()
 
+    def check_users_to_delete(self, subs_to_delete):
         for id, sock in subs_to_delete.items():
             print(f'Sprawdzamy: {id}, {sock}')
             flag = 1
@@ -230,7 +256,6 @@ class Server:
             if flag == 1:
                 print(f'Do usuniecia: {id}, {sock}')
                 sock.close()
-        client_socket.close()
 
     def monitoring_thread(self):
         while True:
