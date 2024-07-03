@@ -181,8 +181,6 @@ def message_callback(payload):
 # Przykład użycia API z obsługą terminala
 if __name__ == "__main__":
 
-
-
     client = SPClientAPI()
     # client.start('127.0.0.1', 12345, 'Client1')
 
@@ -235,6 +233,9 @@ if __name__ == "__main__":
 
         elif command == "server_status":
             client.get_server_status(status_callback)
+
+        elif command == "check_connection":
+            print(client.is_connected())
 
         else:
             print("Unknown command. Please try again.")

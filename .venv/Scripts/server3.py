@@ -80,7 +80,7 @@ class Server:
 
         if mode == 'producer':
             if topic not in topics:
-                topics[topic] = {'producers': {}, 'subscribers': []}
+                topics[topic] = {'producers': {}, 'subscribers': {}}
             else:
                 print(f'Temat {topic} już istnieje i został utworzony przez innego producenta')
                 # self.send_response(client_socket, 'rejected', 'Temat już istnieje')
@@ -95,7 +95,7 @@ class Server:
         elif mode == 'subscriber':
             if client_socket not in topics[topic]['subscribers']:
                 clients[client_socket] = client_id
-                topics[topic]['subscribers'].append(client_socket)
+                topics[topic]['subscribers'][client_id] = client_socket
                 print(f'Zarejestrowano subskrybenta dla tematu {topic}')
             else:
                 print(f'Klient już jest subskrybentem tematu {topic}')
@@ -118,8 +118,9 @@ class Server:
                 else:
                     print(f'Klient {client_id} nie jest producentem tematu {topic}')
             elif mode == 'subscriber':
-                if client_socket in topics[topic]['subscribers']:
-                    topics[topic]['subscribers'].remove(client_socket)
+                if client_id in topics[topic]['subscribers']:
+                    # topics[topic]['subscribers'].remove(client_socket)
+                    del topics[topic]['subscribers'][client_id]
                     print(f'Usunięto subskrypcję klienta dla tematu {topic}')
                 else:
                     print(f'Klient nie jest subskrybentem tematu {topic}')
@@ -132,7 +133,7 @@ class Server:
         topic = message_data['topic']
         if topic in topics:
             if topics[topic]['subscribers']:
-                for subscriber_socket in topics[topic]['subscribers']:
+                for subscriber_socket in topics[topic]['subscribers'].values():
                     KKW.append({
                         'socket': subscriber_socket,
                         'message': message_data
@@ -151,7 +152,9 @@ class Server:
         for topic, data in topics.items():
             status_message["registered_topics"][topic] = {
                 "producers": list(data["producers"].keys()) if data["producers"] else ["brak"],
-                "subscribers": len(data["subscribers"]) if data["subscribers"] else ["brak"]
+                # "subscribers": len(data["subscribers"]) if data["subscribers"] else ["brak"],
+                "subscribers": list(data["subscribers"].keys()) if data["subscribers"] else ["brak"],
+
             }
         print(status_message)
         KKW.append({
@@ -178,14 +181,20 @@ class Server:
 
     def disconnect_client(self, client_socket):
         topics_to_delete = []
+        subs_to_delete = {}
 
         if client_socket in clients:
             del clients[client_socket]
         for topic, data in topics.items():
             print(topic)
             print(data)
-            if client_socket in data['subscribers']:
-                data['subscribers'].remove(client_socket)
+            # if client_socket in data['subscribers']:
+            #     data['subscribers'].remove(client_socket)
+            client_id_to_delete = get_id_by_socket(data['subscribers'], client_socket)
+            if client_id_to_delete:
+                del data['subscribers'][client_id_to_delete]
+            for client_id, socket in data['subscribers'].items():
+                subs_to_delete[client_id] = socket
             if client_socket in data['producers'].values():
                 producers_to_remove = [producer_id for producer_id, socket in data['producers'].items() if
                                        socket == client_socket]
@@ -195,11 +204,29 @@ class Server:
             # if not data['producers'] and not data['subscribers']:
             if not data['producers']:
                 topics_to_delete.append(topic)
-                # del topics[topic]
-                # print(f'Usunięto temat {topic}')
+        print(subs_to_delete)
         print(topics_to_delete)
         for topic in topics_to_delete:
             del topics[topic]
+
+        for id, sock in subs_to_delete.items():
+            print(f'Sprawdzamy: {id}, {sock}')
+            flag = 1
+            for topic, data in topics.items():
+                if id in data['producers'].keys():
+                    flag = 0
+                    continue
+                # if not data['subscribers']:
+                #     print("pusty slownik")
+                #     flag = 0
+                for sub_id, sub_sock in data['subscribers'].items():
+                    print(f'Subskrybent w temacie: {sub_id} ? {id}')
+                    if sub_id == id:
+                        flag = 0
+                        break
+            if flag == 1:
+                print(f'Do usuniecia: {id}, {sock}')
+                sock.close()
         client_socket.close()
 
     def monitoring_thread(self):
@@ -274,6 +301,12 @@ class Server:
         for client, data in clients.items():
             print(f'{data}: {client}')
 
+
+def get_id_by_socket(dict, socket):
+    for client_id, client_socket in dict.items():
+        if client_socket == socket:
+            return client_id
+    return None
 
 if __name__ == "__main__":
     server = Server('127.0.0.1', 12345)
