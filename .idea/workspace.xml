@@ -4,10 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="75429d28-377b-4ee1-a4ea-935d0da8052f" name="Changes" comment="server3.2">
+    <list default="true" id="75429d28-377b-4ee1-a4ea-935d0da8052f" name="Changes" comment="communication with sending and receiving callback in client">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.venv/Scripts/client.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/Scripts/client.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.venv/Scripts/server3.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/Scripts/server3.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -187,7 +186,15 @@
       <option name="project" value="LOCAL" />
       <updated>1719998633405</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="communication with sending and receiving callback in client">
+      <option name="closed" value="true" />
+      <created>1720009907753</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1720009907754</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -197,7 +204,8 @@
     <MESSAGE value="basic client server communication" />
     <MESSAGE value="server3" />
     <MESSAGE value="server3.2" />
-    <option name="LAST_COMMIT_MESSAGE" value="server3.2" />
+    <MESSAGE value="communication with sending and receiving callback in client" />
+    <option name="LAST_COMMIT_MESSAGE" value="communication with sending and receiving callback in client" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

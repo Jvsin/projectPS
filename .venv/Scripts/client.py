@@ -155,7 +155,8 @@ class SPClientAPI:
                 if message:
                     message_data = json.loads(message)
                     if message_data["type"] == "status" and message_data["topic"] == "logs":
-                        print(f'Received server status: {message_data["payload"]}')
+                        status_callback(message_data["payload"])
+                        # print(f'Received server status: {message_data["payload"]}')
                     else:
                         topic = message_data.get("topic")
                         if topic in self.topics_subscribed:
@@ -171,14 +172,15 @@ class SPClientAPI:
             self.connected = False
 
 
+def status_callback(payload):
+    print(f'Callback Server status: {json.dumps(payload, indent=2)}')
+
+
+def message_callback(payload):
+    print(f'Callback Received message: {json.dumps(payload, indent=2)}')
 # Przykład użycia API z obsługą terminala
 if __name__ == "__main__":
-    def status_callback(payload):
-        print(f'Callback Server status: {json.dumps(payload, indent=2)}')
 
-
-    def message_callback(payload):
-        print(f'Callback Received message: {json.dumps(payload, indent=2)}')
 
 
     client = SPClientAPI()
