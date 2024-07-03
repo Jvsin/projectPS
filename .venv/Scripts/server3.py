@@ -91,7 +91,7 @@ class Server:
                 print(f'Zarejestrowano producenta {client_id} dla tematu {topic}')
             else:
                 print(f'Temat {topic} już istnieje i został utworzony przez innego producenta')
-                self.send_response(client_socket, 'rejected', 'Temat już istnieje')
+                # self.send_response(client_socket, 'rejected', 'Temat już istnieje')
         elif mode == 'subscriber':
             if client_socket not in topics[topic]['subscribers']:
                 clients[client_socket] = client_id
@@ -110,10 +110,13 @@ class Server:
         if topic in topics:
             if mode == 'producer':
                 if client_id in topics[topic]['producers'] and topics[topic]['producers'][client_id] == client_socket:
+                    print(f'check: {topics[topic]['producers']}')
                     if not topics[topic]['producers']:
                         del topics[topic]
                     # self.disconnect_client(client_socket)
+                    print(f'check2: {topics[topic]['producers'][client_id]}')
                     del topics[topic]['producers'][client_id]
+                    del topics[topic] # tu przeniosłem to co w 114
                     print(f'Usunięto temat {topic}')
                 else:
                     print(f'Klient {client_id} nie jest producentem tematu {topic}')
