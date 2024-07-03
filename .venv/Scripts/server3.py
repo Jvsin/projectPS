@@ -78,8 +78,6 @@ class Server:
         client_id = message_data['id']
         mode = message_data['mode']
 
-
-
         if mode == 'producer':
             if topic not in topics:
                 topics[topic] = {'producers': {}, 'subscribers': []}
@@ -112,10 +110,10 @@ class Server:
         if topic in topics:
             if mode == 'producer':
                 if client_id in topics[topic]['producers'] and topics[topic]['producers'][client_id] == client_socket:
-                    del topics[topic]['producers'][client_id]
                     if not topics[topic]['producers']:
                         del topics[topic]
                     # self.disconnect_client(client_socket)
+                    del topics[topic]['producers'][client_id]
                     print(f'Usunięto temat {topic}')
                 else:
                     print(f'Klient {client_id} nie jest producentem tematu {topic}')
@@ -179,6 +177,8 @@ class Server:
         # client_socket.sendall(json.dumps(response).encode())
 
     def disconnect_client(self, client_socket):
+        topics_to_delete = []
+
         if client_socket in clients:
             del clients[client_socket]
         for topic, data in topics.items():
@@ -192,9 +192,14 @@ class Server:
                 for producer_id in producers_to_remove:
                     del data['producers'][producer_id]
                     # self.send_response(client_socket, 'withdraw', f'Usunięto producenta {producer_id} z tematu {topic}')
-            if not data['producers'] and not data['subscribers']:
-                del topics[topic]
-                print(f'Usunięto temat {topic}')
+            # if not data['producers'] and not data['subscribers']:
+            if not data['producers']:
+                topics_to_delete.append(topic)
+                # del topics[topic]
+                # print(f'Usunięto temat {topic}')
+        print(topics_to_delete)
+        for topic in topics_to_delete:
+            del topics[topic]
         client_socket.close()
 
     def monitoring_thread(self):

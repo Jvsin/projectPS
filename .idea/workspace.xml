@@ -4,9 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="75429d28-377b-4ee1-a4ea-935d0da8052f" name="Changes" comment="communication with sending and receiving callback in client">
+    <list default="true" id="75429d28-377b-4ee1-a4ea-935d0da8052f" name="Changes" comment="hf">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.venv/Scripts/client.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/Scripts/client.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/Scripts/server3.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/Scripts/server3.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -194,7 +194,15 @@
       <option name="project" value="LOCAL" />
       <updated>1720009907754</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="hf">
+      <option name="closed" value="true" />
+      <created>1720021745235</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1720021745235</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -205,10 +213,18 @@
     <MESSAGE value="server3" />
     <MESSAGE value="server3.2" />
     <MESSAGE value="communication with sending and receiving callback in client" />
-    <option name="LAST_COMMIT_MESSAGE" value="communication with sending and receiving callback in client" />
+    <MESSAGE value="hf" />
+    <option name="LAST_COMMIT_MESSAGE" value="hf" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/.venv/Scripts/server3.py</url>
+          <line>183</line>
+          <option name="timeStamp" value="5" />
+        </line-breakpoint>
+      </breakpoints>
       <default-breakpoints>
         <breakpoint type="python-exception">
           <properties notifyOnTerminate="true" exception="BaseException">
