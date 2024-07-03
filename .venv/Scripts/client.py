@@ -50,7 +50,7 @@ class SPClientAPI:
             "payload": {}
         }
         self.send_message(status_message)
-        threading.Thread(target=self.await_server_status_response, args=(callback,), daemon=True).start()
+        # threading.Thread(target=self.await_server_status_response, args=(callback,), daemon=True).start()
 
     def create_producer(self, topic_name):
         register_message = {
@@ -141,6 +141,7 @@ class SPClientAPI:
                 response = self.client_socket.recv(1024).decode()
                 if response:
                     response_message = json.loads(response)
+                    print("wszedłem do await_server_status_response")
                     if response_message["type"] == "status" and response_message["topic"] == "logs":
                         callback(response_message["payload"])
                         break
@@ -173,11 +174,11 @@ class SPClientAPI:
 # Przykład użycia API z obsługą terminala
 if __name__ == "__main__":
     def status_callback(payload):
-        print(f'Server status: {json.dumps(payload, indent=2)}')
+        print(f'Callback Server status: {json.dumps(payload, indent=2)}')
 
 
     def message_callback(payload):
-        print(f'Received message: {json.dumps(payload, indent=2)}')
+        print(f'Callback Received message: {json.dumps(payload, indent=2)}')
 
 
     client = SPClientAPI()

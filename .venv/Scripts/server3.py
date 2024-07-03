@@ -42,7 +42,11 @@ class Server:
                 message = client_socket.recv(1024).decode()
                 if not message:
                     break
-                self.handle_message(message, client_socket)
+                KKO.append({
+                    'socket': client_socket,
+                    'message': message
+                })
+                # self.handle_message(message, client_socket)
                 # print(message)
                 # self.manage_message(message)
         except socket.error as e:
@@ -53,7 +57,7 @@ class Server:
     def handle_message(self, message, client_socket):
         try:
             message_data = json.loads(message)
-            print(message_data)
+            # print(message_data)
             if message_data['type'] == 'register':
                 self.handle_register(message_data, client_socket)
             elif message_data['type'] == 'withdraw':
@@ -74,10 +78,15 @@ class Server:
         client_id = message_data['id']
         mode = message_data['mode']
 
-        if topic not in topics:
-            topics[topic] = {'producers': {}, 'subscribers': []}
+
 
         if mode == 'producer':
+            if topic not in topics:
+                topics[topic] = {'producers': {}, 'subscribers': []}
+            else:
+                print(f'Temat {topic} już istnieje i został utworzony przez innego producenta')
+                # self.send_response(client_socket, 'rejected', 'Temat już istnieje')
+                return
             if client_id not in topics[topic]['producers']:
                 topics[topic]['producers'][client_id] = client_socket
                 clients[client_socket] = client_id
@@ -124,12 +133,15 @@ class Server:
     def handle_message_type(self, message_data, client_socket):
         topic = message_data['topic']
         if topic in topics:
-            for subscriber_socket in topics[topic]['subscribers']:
-                KKW.append({
-                    'socket': subscriber_socket,
-                    'message': message_data
-                })
-            print(f'Dodano komunikat do KKW dla tematu {topic}')
+            if topics[topic]['subscribers']:
+                for subscriber_socket in topics[topic]['subscribers']:
+                    KKW.append({
+                        'socket': subscriber_socket,
+                        'message': message_data
+                    })
+                    print(f'Dodano komunikat do KKW dla tematu {topic}')
+            else:
+                print(f'Brak subskrybentów tematu {topic}')
         else:
             print(f'Temat {topic} nie istnieje')
 
@@ -160,10 +172,11 @@ class Server:
 
     def send_response(self, client_socket, response_type, message):
         response = {
-            'type': response_type,
+            'socket': client_socket,
             'message': message
         }
-        client_socket.sendall(json.dumps(response).encode())
+        KKW.append(response)
+        # client_socket.sendall(json.dumps(response).encode())
 
     def disconnect_client(self, client_socket):
         if client_socket in clients:
@@ -192,12 +205,13 @@ class Server:
 
             if KKO:
                 message = KKO.pop(0)
+                print(f'Pobrano {message} z KKO')
                 if self.validate_message(message):
-                    self.manage_message(message)
+                    # self.manage_message(message)
+                    self.handle_message(message['message'],message['socket'])
 
             if KKW:
                 item = KKW.pop(0)
-                print(item)
                 client_socket = item['socket']
                 message = item['message']
                 try:
@@ -232,6 +246,7 @@ class Server:
 
     def user_interface_thread(self):
         while True:
+            time.sleep(3)
             command = input("Wpisz komendę (np. 'show topics', 'show clients'): ")
             if command.lower() == 'show topics':
                 self.show_registered_topics()
