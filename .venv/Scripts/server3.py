@@ -30,6 +30,8 @@ class Server:
         while True:
             try:
                 client_socket, addr = self.server_socket.accept()
+                if client_socket not in clients:
+                    clients[client_socket] = 'new user'
                 threading.Thread(target=self.client_handler, args=(client_socket,)).start()
             except socket.error as e:
                 print(f'Błąd gniazda: {e}')
@@ -41,6 +43,8 @@ class Server:
                 if not message:
                     break
                 self.handle_message(message, client_socket)
+                # print(message)
+                # self.manage_message(message)
         except socket.error as e:
             print(f'Błąd komunikacji z klientem: {e}')
         finally:
@@ -83,6 +87,7 @@ class Server:
                 self.send_response(client_socket, 'rejected', 'Temat już istnieje')
         elif mode == 'subscriber':
             if client_socket not in topics[topic]['subscribers']:
+                clients[client_socket] = client_id
                 topics[topic]['subscribers'].append(client_socket)
                 print(f'Zarejestrowano subskrybenta dla tematu {topic}')
             else:
@@ -101,7 +106,7 @@ class Server:
                     del topics[topic]['producers'][client_id]
                     if not topics[topic]['producers']:
                         del topics[topic]
-                    self.disconnect_client(client_socket)
+                    # self.disconnect_client(client_socket)
                     print(f'Usunięto temat {topic}')
                 else:
                     print(f'Klient {client_id} nie jest producentem tematu {topic}')
@@ -164,6 +169,8 @@ class Server:
         if client_socket in clients:
             del clients[client_socket]
         for topic, data in topics.items():
+            print(topic)
+            print(data)
             if client_socket in data['subscribers']:
                 data['subscribers'].remove(client_socket)
             if client_socket in data['producers'].values():
@@ -171,7 +178,7 @@ class Server:
                                        socket == client_socket]
                 for producer_id in producers_to_remove:
                     del data['producers'][producer_id]
-                    self.send_response(client_socket, 'withdraw', f'Usunięto producenta {producer_id} z tematu {topic}')
+                    # self.send_response(client_socket, 'withdraw', f'Usunięto producenta {producer_id} z tematu {topic}')
             if not data['producers'] and not data['subscribers']:
                 del topics[topic]
                 print(f'Usunięto temat {topic}')
@@ -209,6 +216,7 @@ class Server:
             return False
 
     def manage_message(self, message):
+        print(message)
         message_data = message['message']
         message_type = message_data['type']
         if message_type == 'register':
@@ -224,17 +232,27 @@ class Server:
 
     def user_interface_thread(self):
         while True:
-            command = input("Wpisz komendę (np. 'show topics'): ")
+            command = input("Wpisz komendę (np. 'show topics', 'show clients'): ")
             if command.lower() == 'show topics':
                 self.show_registered_topics()
+            if command.lower() == 'show clients':
+                self.show_connected_clients()
             ## zamykanie serwera
 
     def show_registered_topics(self):
         print("Zarejestrowane tematy:")
         for topic, data in topics.items():
             producers = list(data['producers'].keys())
-            subscribers = len(data['subscribers'])
+            if len(data['subscribers']):
+                subscribers = list(data['subscribers'])
+            else:
+                subscribers = 0
             print(f"Temat: {topic}, Producent(ów): {producers}, Subskrybentów: {subscribers}")
+
+    def show_connected_clients(self):
+        print("Połączeni klienci:")
+        for client, data in clients.items():
+            print(f'{data}: {client}')
 
 
 if __name__ == "__main__":

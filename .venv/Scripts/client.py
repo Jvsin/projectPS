@@ -181,18 +181,21 @@ if __name__ == "__main__":
 
 
     client = SPClientAPI()
-    client.start('127.0.0.1', 12345, 'Client1')
+    # client.start('127.0.0.1', 12345, 'Client1')
 
     time.sleep(2)  # Czekaj na połączenie
 
     while True:
+        time.sleep(1)
         command = input(
             "Enter command (start, stop, status, create_producer, produce, withdraw_producer, create_subscriber, withdraw_subscriber, server_status): ")
 
         if command == "start":
             if not client.is_connected():
-                server_ip = input("Enter server IP: ")
-                server_port = int(input("Enter server port: "))
+                # server_ip = input("Enter server IP: ")
+                # server_port = int(input("Enter server port: "))
+                server_ip = '127.0.0.1'
+                server_port = 12345
                 client_id = input("Enter client ID: ")
                 client.start(server_ip, server_port, client_id)
             else:
@@ -228,7 +231,6 @@ if __name__ == "__main__":
             client.withdraw_subscriber(topic_name)
 
         elif command == "server_status":
-            time.sleep(1)
             client.get_server_status(status_callback)
 
         else:
