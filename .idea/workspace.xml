@@ -4,9 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="75429d28-377b-4ee1-a4ea-935d0da8052f" name="Changes" comment="hf deleting from topic list">
+    <list default="true" id="75429d28-377b-4ee1-a4ea-935d0da8052f" name="Changes" comment="added check users to delete when withdraw topic">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.venv/Scripts/server3.py" beforeDir="false" afterPath="$PROJECT_DIR$/.venv/Scripts/server3.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/Scripts/server.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/Scripts/server2.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.venv/Scripts/server3.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,21 +49,21 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Python.basic_client.executor": "Run",
-    "Python.client.executor": "Run",
-    "Python.main_server.executor": "Run",
-    "Python.producer.executor": "Run",
-    "Python.server.executor": "Run",
-    "Python.server2.executor": "Run",
-    "Python.server3.executor": "Run",
-    "Python.subscriber.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "master",
-    "settings.editor.selected.configurable": "preferences.lookFeel"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Python.basic_client.executor&quot;: &quot;Run&quot;,
+    &quot;Python.client.executor&quot;: &quot;Run&quot;,
+    &quot;Python.main_server.executor&quot;: &quot;Run&quot;,
+    &quot;Python.producer.executor&quot;: &quot;Run&quot;,
+    &quot;Python.server.executor&quot;: &quot;Run&quot;,
+    &quot;Python.server2.executor&quot;: &quot;Run&quot;,
+    &quot;Python.server3.executor&quot;: &quot;Run&quot;,
+    &quot;Python.subscriber.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected="Python.client">
     <configuration name="basic_client" type="PythonConfigurationType" factoryName="Python" singleton="false" temporary="true" nameIsGenerated="true">
       <module name="projectPS" />
@@ -230,7 +232,15 @@
       <option name="project" value="LOCAL" />
       <updated>1720038065714</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="added check users to delete when withdraw topic">
+      <option name="closed" value="true" />
+      <created>1720040065001</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1720040065001</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -245,7 +255,8 @@
     <MESSAGE value="deleting topics and subscriber when client disconnect" />
     <MESSAGE value="closing users with no subs + fix of sending messages" />
     <MESSAGE value="hf deleting from topic list" />
-    <option name="LAST_COMMIT_MESSAGE" value="hf deleting from topic list" />
+    <MESSAGE value="added check users to delete when withdraw topic" />
+    <option name="LAST_COMMIT_MESSAGE" value="added check users to delete when withdraw topic" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
